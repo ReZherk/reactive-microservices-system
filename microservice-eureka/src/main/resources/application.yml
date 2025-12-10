@@ -1,0 +1,19 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: msvc-eureka
+  config:
+    # Importa configuración externa desde un Config Server en localhost:8888(Esto es gracias a la dependecia de config client).
+    # El prefijo 'optional:' permite que la aplicación arranque incluso si el servidor no está disponible.
+    import: optional:configserver:http://localhost:8888
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    server-url:
+      defaultZone: http://localhost:${server.port}/eureka/
