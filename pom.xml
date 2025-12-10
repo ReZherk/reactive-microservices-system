@@ -15,9 +15,16 @@
 	<groupId>com.ReZherk</groupId>
 	<artifactId>reactive-microservices-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>reactive-microservices-system</name>
 	<packaging>pom</packaging> <!-- Usar 'pom' si este proyecto será padre de varios módulos; 'jar' si será ejecutable -->
 	<description>Sistema de microservicios reactivos</description>
+	
+	<!--Definicion de los modulos en el padre-->
+	<modules>
+		<module>microservice-gateway</module>
+	</modules>
+
 	<url/>
 	<licenses>
 		<license/>
