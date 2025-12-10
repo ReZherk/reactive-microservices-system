@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-
+	<!--Configuracion para  indicar quien es el padre-->
 	<parent>
 		<groupId>com.ReZherk</groupId>
 		<artifactId>reactive-microservices-system</artifactId>
@@ -14,6 +14,7 @@
 	<groupId>com.ReZherk</groupId>
 	<artifactId>microservice-eureka</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>microservice-eureka</name>
 	<description>Spring Boot  Microservice Eureka</description>
 	<url/>
@@ -29,29 +30,50 @@
 		<tag/>
 		<url/>
 	</scm>
+
+
 	<properties>
 		<java.version>17</java.version>
-		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<spring-cloud.version>2024.0.0</spring-cloud.version> <!--Este es el BOM (Bill of Materials).No es una librería, sino un catálogo oficial de versiones compatibles. -->
 	</properties>
+
+ 	<!-- DEPENDENCIAS DIRECTAS:
+        Aquí se listan las librerías que este microservicio necesita para funcionar.
+        Cada dependencia se descarga y se usa en el código.-->
 	<dependencies>
+
+		<!-- Actuator: expone métricas y endpoints de monitoreo -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+	
+		 <!-- Config Client: conecta con un Config Server para leer configuraciones centralizadas -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+
+		<!-- Eureka Server: convierte esta aplicación en un servidor de registro de microservicios -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
+
+		<!-- Starter de pruebas: incluye JUnit y utilidades para testear -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+
+ 	<!-- DEPENDENCY MANAGEMENT (BOM):
+        Aquí no se agregan librerías directamente.
+        Se importa un BOM (Bill of Materials), que es un catálogo oficial de versiones compatibles.
+        Esto asegura que todas las dependencias de Spring Cloud usen versiones alineadas con Spring Boot.
+        Así, arriba no ponemos versión en cada dependencia: el BOM ya las define.-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
