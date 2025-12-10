@@ -1,0 +1,30 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: msvc-auth
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/authDb
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+  config:
+    # Importa configuración externa desde un Config Server en localhost:8888(Esto es gracias a la dependecia de config client).
+    # El prefijo 'optional:' permite que la aplicación arranque incluso si el servidor no está disponible.
+    import: optional:configserver:http://localhost:8888
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
