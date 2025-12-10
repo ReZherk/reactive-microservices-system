@@ -2,16 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Este proyecto hereda configuraciones del POM padre de Spring Boot -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.1.4</version>
+		<relativePath/>
 	</parent>
+
+
 	<groupId>com.ReZherk</groupId>
 	<artifactId>reactive-microservices-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>reactive-microservices-system</name>
+	<packaging>pom</packaging> <!-- Usar 'pom' si este proyecto será padre de varios módulos; 'jar' si será ejecutable -->
 	<description>Sistema de microservicios reactivos</description>
 	<url/>
 	<licenses>
@@ -26,29 +31,39 @@
 		<tag/>
 		<url/>
 	</scm>
+
+	<!-- Configuración de compilación: UTF-8 y Java 17. 
+     Estas propiedades (source/target) son interpretadas directamente por Maven.
+     La propiedad java.version solo tiene efecto si un POM padre, como Spring Boot, la usa internamente. -->
 	<properties>
-		<java.version>17</java.version>
-	</properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
+
+<!-- El bloque pluginManagement sirve para definir versiones y configuraciones de plugins en el POM padre. -->
+<!-- Los módulos hijos pueden heredar estas configuraciones, pero deben declarar el plugin en <plugins> para activarlo. -->
+<!-- Si todo corre en un único proyecto (sin estructura padre-hijo), lo recomendable es usar directamente <plugins>. -->
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>3.1.4</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>
