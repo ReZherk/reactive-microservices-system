@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
@@ -21,6 +21,16 @@ spring:
     # Importa configuración externa desde un Config Server en localhost:8888(Esto es gracias a la dependecia de config client).
     # El prefijo 'optional:' permite que la aplicación arranque incluso si el servidor no está disponible.
     import: optional:configserver:http://localhost:8888
+
+jwt:
+  secret: mySecretKeyForJWTTokenGenerationMustBeLongEnough256Bits
+  expiration: 86400000
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
 
 eureka:
   instance:
