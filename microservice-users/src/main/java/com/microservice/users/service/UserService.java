@@ -6,9 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.microservice.users.dto.request.UserRequestDto;
+import com.ReZherk.common.dto.request.UserRequestDto;
+import com.ReZherk.common.dto.response.UserResponseDto;
+
 import com.microservice.users.dto.request.UserUpdateDto;
-import com.microservice.users.dto.response.UserResponseDto;
 import com.microservice.users.entity.User;
 import com.microservice.users.exception.UserAlreadyExistsException;
 import com.microservice.users.exception.UserNotFoundException;

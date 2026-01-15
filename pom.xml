@@ -22,6 +22,7 @@
 	
 	<!--Definicion de los modulos en el padre-->
 	<modules>
+		<module>common</module>
 		<module>microservice-gateway</module>
 		<module>microservice-eureka</module>
 		<module>microservice-config</module>

@@ -86,7 +86,14 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
-
+        <!-- This dependency comes from the local multi-module project.
+             It points to the "common" module (packaged as a JAR) inside the parent project.
+             Purpose: to share DTO classes and other reusable code across microservices. -->
+        <dependency>
+            <groupId>com.ReZherk</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
 
     </dependencies>

@@ -3,12 +3,17 @@ package com.ReZherk.microservice_auth.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ReZherk.common.dto.request.UserRequestDto;
+import com.ReZherk.microservice_auth.client.UserClient;
 import com.ReZherk.microservice_auth.config.JwtUtil;
 import com.ReZherk.microservice_auth.dto.AuthResponseDto;
 import com.ReZherk.microservice_auth.dto.LoginRequestDto;
 import com.ReZherk.microservice_auth.dto.RegisterRequestDto;
 import com.ReZherk.microservice_auth.entity.User;
+import com.ReZherk.microservice_auth.exception.ExternalServiceException;
+import com.ReZherk.microservice_auth.mapper.AuthMapper;
 import com.ReZherk.microservice_auth.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +23,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final UserClient userClient;
+    private final AuthMapper authMapper;
 
     public AuthResponseDto register(RegisterRequestDto request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -35,6 +42,13 @@ public class AuthService {
                 .build();
 
         user = userRepository.save(user);
+
+        UserRequestDto dto = authMapper.mapToUserRequestDto(request);
+        try {
+            userClient.registerUser(dto);
+        } catch (Exception e) {
+            throw new ExternalServiceException("Failed to register user in Users service", e);
+        }
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
         return new AuthResponseDto(token, user.getUsername(), user.getRole());

@@ -2,9 +2,10 @@ package com.microservice.users.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.microservice.users.dto.request.UserRequestDto;
+import com.ReZherk.common.dto.request.UserRequestDto;
+import com.ReZherk.common.dto.response.UserResponseDto;
+
 import com.microservice.users.dto.request.UserUpdateDto;
-import com.microservice.users.dto.response.UserResponseDto;
 import com.microservice.users.entity.User;
 
 @Component

@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microservice.users.dto.request.UserRequestDto;
+import com.ReZherk.common.dto.request.UserRequestDto;
+import com.ReZherk.common.dto.response.UserResponseDto;
+
 import com.microservice.users.dto.request.UserUpdateDto;
-import com.microservice.users.dto.response.UserResponseDto;
 import com.microservice.users.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     @Operation(summary = "Create new user")
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto requestDto) {
         UserResponseDto response = userService.createUser(requestDto);

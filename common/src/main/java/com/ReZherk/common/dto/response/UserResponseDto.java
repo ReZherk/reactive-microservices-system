@@ -1,4 +1,4 @@
-package com.microservice.users.dto.response;
+package com.ReZherk.common.dto.response;
 
 import java.time.LocalDateTime;
 
