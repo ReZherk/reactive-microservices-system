@@ -28,6 +28,7 @@
 		<module>microservice-config</module>
 		<module>microservice-auth</module>
 		<module>microservice-users</module>
+		<module>microservice-reservations</module>
 	</modules>
 
 	<url/>
