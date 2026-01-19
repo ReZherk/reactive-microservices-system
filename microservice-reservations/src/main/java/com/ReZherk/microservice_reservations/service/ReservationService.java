@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.ReZherk.microservice_reservations.client.UserServiceClient;
@@ -51,6 +52,19 @@ public class ReservationService {
                     return Flux.fromIterable(available);
 
                 });
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void releaseExpiredReservations() {
+        reservationRepository.findByStatus("PENDING")
+                .filter(reservation -> reservation.getCreatedAt() != null
+                        && reservation.getCreatedAt().isBefore(LocalDateTime.now().minusDays(1)))
+                .flatMap(reservation -> {
+                    reservation.setStatus("CANCELLED");
+                    reservation.setUpdatedAt(LocalDateTime.now());
+                    return reservationRepository.save(reservation);
+                })
+                .subscribe();
     }
 
     public Mono<ReservationResponseDto> createReservation(ReservationRequestDto requestDto) {
