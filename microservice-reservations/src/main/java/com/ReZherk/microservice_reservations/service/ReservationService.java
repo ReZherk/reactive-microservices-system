@@ -1,5 +1,6 @@
 package com.ReZherk.microservice_reservations.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,23 +70,37 @@ public class ReservationService {
 
     public Mono<ReservationResponseDto> createReservation(ReservationRequestDto requestDto) {
         if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
-            return Mono.error(new InvalidReservationException("Start date must be  before end date"));
+            return Mono.error(new InvalidReservationException("Start date must be before end date"));
         }
 
-        return userServiceClient.validateUser(requestDto.getUserId())
-                .flatMap(isValid -> {
+        List<LocalDateTime> requestedDates = new ArrayList<>();
+        LocalDateTime current = requestDto.getStartDate();
+        while (!current.isAfter(requestDto.getEndDate())) {
+            requestedDates.add(current);
+            current = current.plusDays(1);
+        }
 
-                    if (!isValid) {
-                        return Mono.error(new InvalidReservationException("User is not active or does not exist"));
+        return getAvailableDates(requestDto.getResourceName(), requestDto.getStartDate(), requestDto.getEndDate())
+                .collectList()
+                .flatMap(availableDates -> {
+                    if (!availableDates.containsAll(requestedDates)) {
+                        return Mono.error(new InvalidReservationException("Some requested dates are not available"));
                     }
 
-                    Reservation reservation = reservationMapper.toEntity(requestDto);
+                    return userServiceClient.validateUser(requestDto.getUserId())
+                            .flatMap(isValid -> {
+                                if (!isValid) {
+                                    return Mono.error(
+                                            new InvalidReservationException("User is not active or does not exist"));
+                                }
 
-                    return reservationRepository.save(reservation)
-                            .flatMap(saved -> userServiceClient.getUserById(requestDto.getUserId())
-                                    .map(user -> reservationMapper.toDto(saved, user))
-                                    .onErrorReturn(reservationMapper.toDto(saved, null)));
+                                Reservation reservation = reservationMapper.toEntity(requestDto);
 
+                                return reservationRepository.save(reservation)
+                                        .flatMap(saved -> userServiceClient.getUserById(requestDto.getUserId())
+                                                .map(user -> reservationMapper.toDto(saved, user))
+                                                .onErrorReturn(reservationMapper.toDto(saved, null)));
+                            });
                 });
     }
 
