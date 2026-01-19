@@ -145,6 +145,30 @@ public class ReservationService {
                         if (updateDto.getStartDate().isAfter(updateDto.getEndDate())) {
                             return Mono.error(new InvalidReservationException("Start date must be before end date"));
                         }
+
+                        List<LocalDateTime> requestedDates = new ArrayList<>();
+                        LocalDateTime current = updateDto.getStartDate();
+                        while (!current.isAfter(updateDto.getEndDate())) {
+                            requestedDates.add(current);
+                            current = current.plusDays(1);
+                        }
+
+                        return getAvailableDates(reservation.getResourceName(), updateDto.getStartDate(),
+                                updateDto.getEndDate())
+                                .collectList()
+                                .flatMap(availableDates -> {
+
+                                    if (!availableDates.containsAll(requestedDates)) {
+                                        return Mono.error(new InvalidReservationException(
+                                                "Some requested dates are not available"));
+                                    }
+
+                                    reservationMapper.updateEntityFromDto(updateDto, reservation);
+                                    return reservationRepository.save(reservation)
+                                            .flatMap(updated -> userServiceClient.getUserById(updated.getUserId())
+                                                    .map(user -> reservationMapper.toDto(updated, user))
+                                                    .onErrorReturn(reservationMapper.toDto(updated, null)));
+                                });
                     }
 
                     reservationMapper.updateEntityFromDto(updateDto, reservation);
